@@ -7,15 +7,15 @@
 
 @section('content')
     <div class="row">
-        @foreach ($topics as $topic)
+        @foreach ($blocks as $block)
             <div class="card">
                 <div class="card-header">
-                {{ $topic->topicName }}
+                {{ $block->topicName }}
                 </div>
                 <div class="card-body">
-                <h5 class="card-title">{{ $topic->topicName }}</h5>
-                <p class="card-text">{{ $topic->created_at }}</p>
-                <a href="{{ url('/topic', ['id' => $topic->id]) }}" class="btn btn-primary">Go to {{ $topic->id }}</a>
+                <h5 class="card-title">{{ $block->title }}</h5>
+                <p class="card-text">{{ $block->created_at }}</p>
+                <a href="{{ url('/topic', ['id' => $block->id]) }}" class="btn btn-primary">Go to {{ $block->id }}</a>
                 </div>
             </div>
         @endforeach

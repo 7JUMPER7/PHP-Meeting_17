@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Block extends Model
 {
     use HasFactory;
-    protected $table = 'Block';
+    protected $table = 'Blocks';
     protected $primaryKey = 'id';
     protected $fillable = ['topicId', 'title', 'content', 'imagePath', 'created_at', 'updated_at'];
 }

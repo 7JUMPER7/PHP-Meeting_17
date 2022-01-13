@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Block;
 use App\Models\Topic;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class TopicController extends Controller
+class BlockController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +17,8 @@ class TopicController extends Controller
     public function index()
     {
         //
-        $topics = Topic::all();
-        return view('topic.index', array('topics' => $topics));
+        $blocks = DB::select('select * from Blocks join Topics on Topics.id = Blocks.topicId');
+        return view('block.index', array('blocks' => $blocks));
     }
 
     /**
@@ -27,7 +29,12 @@ class TopicController extends Controller
     public function create()
     {
         //
-        return view('topic.create');
+        $res = Topic::all(['id', 'topicName']);
+        $topics = array();
+        foreach($res as $topic) {
+            $topics += [$topic->id => $topic->topicName];
+        }
+        return view('block.create', array('topics' => $topics));
     }
 
     /**
@@ -39,11 +46,11 @@ class TopicController extends Controller
     public function store(Request $request)
     {
         //
-        $topic = new Topic();
-        $topicname = $request->topicname;
-        $topic->topicname = $topicname;
-        $topic->save();
-        return redirect('topic');
+        $block = new Block();
+        $block->title = $request->title;
+        $block->topicId = $request->topicId;
+        $block->save();
+        return redirect('/block');
     }
 
     /**
@@ -55,8 +62,6 @@ class TopicController extends Controller
     public function show($id)
     {
         //
-        $topic = Topic::all()->where('id', $id)->first();
-        return view('topic.show', array('topic' => $topic));
     }
 
     /**
