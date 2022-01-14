@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BlockController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,4 @@ use Illuminate\Support\Facades\Route;
 Route::resource('topic', TopicController::class);
 Route::resource('block', BlockController::class);
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/{id?}', [HomeController::class, 'index']);

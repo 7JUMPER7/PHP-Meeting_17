@@ -6,25 +6,53 @@
 @endsection
 
 @section('content')
-    <div class="row">
-        {!! Form::open(['method' => 'POST', 'route' => 'block.store', 'class' => 'form-horizontal']) !!}
+    <div class="container">
 
-        <div class="form-group{{ $errors->has('inputname') ? ' has-error' : '' }}">
-        {!! Form::label('title', 'Title') !!}
-        {!! Form::text('title', null, ['class' => 'form-control', 'required' => 'required']) !!}
-        <small class="text-danger">{{ $errors->first('inputname') }}</small>
-        </div>
+        @if (session('errors') && count(session('errors')) > 0)
+        @foreach (session('errors')->all() as $err)
+            <div class="alert alert-warning" role="alert">
+                {{ $err }}
+            </div>
+        @endforeach
+        @endif
 
-        <div class="form-group{{ $errors->has('inputname') ? ' has-error' : '' }}">
-        {!! Form::label('topicId', 'Topic') !!}
-        {!! Form::select('topicId', $topics, null, ['id' => 'topicId', 'class' => 'form-control', 'required' => 'required']) !!}
-        <small class="text-danger">{{ $errors->first('inputname') }}</small>
+        @if (session('message'))
+        <div class="alert alert-success" role="alert">
+            {{ session('message') }}
         </div>
+        @endif
 
-        <div class="btn-group pull-right">
-        {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!}
-        {!! Form::submit('Add', ['class' => 'btn btn-success']) !!}
+        <div class="row m-3">
+            {!! Form::open(['method' => 'POST', 'route' => 'block.store', 'class' => 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
+            <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
+            {!! Form::label('title', 'Title') !!}
+            {!! Form::text('title', null, ['class' => 'form-control', 'required' => 'required']) !!}
+            <small class="text-danger">{{ $errors->first('title') }}</small>
+            </div>
+
+            <div class="form-group{{ $errors->has('topicId') ? ' has-error' : '' }}">
+            {!! Form::label('topicId', 'Topic') !!}
+            {!! Form::select('topicId', $topics, null, ['id' => 'topicId', 'class' => 'form-control', 'required' => 'required']) !!}
+            <small class="text-danger">{{ $errors->first('topicId') }}</small>
+            </div>
+
+            <div class="form-group{{ $errors->has('photo') ? ' has-error' : '' }}">
+            {!! Form::label('photo', 'Image') !!}
+            {!! Form::file('photo', ['required' => 'required']) !!}
+            <small class="text-danger">{{ $errors->first('photo') }}</small>
+            </div>
+
+            <div class="form-group{{ $errors->has('content') ? ' has-error' : '' }}">
+            {!! Form::label('content', 'Content') !!}
+            {!! Form::textarea('content', null, ['class' => 'form-control', 'required' => 'required']) !!}
+            <small class="text-danger">{{ $errors->first('content') }}</small>
+            </div>
+
+            <div class="btn-group pull-right">
+            {!! Form::reset("Reset", ['class' => 'btn btn-warning']) !!}
+            {!! Form::submit('Add', ['class' => 'btn btn-success']) !!}
+            </div>
+            {!! Form::close() !!}
         </div>
-        {!! Form::close() !!}
     </div>
 @endsection

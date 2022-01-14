@@ -6,9 +6,15 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="container">
+        {!! Form::open(['method' => 'GET', 'route' => 'topic.create', 'class' => 'form-horizontal m-2']) !!}
+        <div class="btn-group pull-right">
+        {!! Form::submit('Add', ['class' => 'btn btn-success']) !!}
+        </div>
+        {!! Form::close() !!}
+
         @foreach ($topics as $topic)
-            <div class="card">
+            <div class="card m-2">
                 <div class="card-header">
                 {{ $topic->topicName }}
                 </div>

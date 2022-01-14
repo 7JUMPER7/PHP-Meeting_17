@@ -39,11 +39,21 @@ class TopicController extends Controller
     public function store(Request $request)
     {
         //
+        $messages = [
+            'unique' => 'Value :attribute should be unique',
+            'required' => 'Field :attribute is required'
+        ];
+        $this->validate($request, ['topicname' => 'required|string|unique:topics,topicName'], $messages);
         $topic = new Topic();
         $topicname = $request->topicname;
         $topic->topicname = $topicname;
-        $topic->save();
-        return redirect('topic');
+        if(!$topic->save()) {
+            $errors = $topic->getErrors();
+            var_dump($errors);
+            return redirect()->action([TopicController::class, 'create'])->with('errors', $errors);
+        }
+        return redirect()->action([TopicController::class, 'create'])->with('message', 'Successfully created');
+        // return redirect('topic');
     }
 
     /**

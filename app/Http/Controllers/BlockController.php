@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Block;
 use App\Models\Topic;
+use Facade\FlareClient\Http\Exceptions\NotFound;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,11 +30,12 @@ class BlockController extends Controller
     public function create()
     {
         //
-        $res = Topic::all(['id', 'topicName']);
-        $topics = array();
-        foreach($res as $topic) {
-            $topics += [$topic->id => $topic->topicName];
-        }
+        // $res = Topic::all(['id', 'topicName']);
+        // $topics = array();
+        // foreach($res as $topic) {
+        //     $topics += [$topic->id => $topic->topicName];
+        // }
+        $topics = Topic::pluck('topicName', 'id');
         return view('block.create', array('topics' => $topics));
     }
 
@@ -49,8 +51,18 @@ class BlockController extends Controller
         $block = new Block();
         $block->title = $request->title;
         $block->topicId = $request->topicId;
-        $block->save();
-        return redirect('/block');
+        $block->content = $request->content;
+        if($request->file('photo')) {
+            $filename = $request->file('photo')->getClientOriginalName();
+            $request->file('photo')->move(public_path().'/images', $filename);
+            $block->imagePath = 'images/'.$filename;
+        }
+
+        if(!$block->save()) {
+            $errors = $block->getErrors();
+            return redirect()->action([BlockController::class, 'create'])->with('errors', $errors)->withInput();
+        }
+        return redirect()->action([BlockController::class, 'create'])->with('message', 'Successfully created');
     }
 
     /**
@@ -62,6 +74,12 @@ class BlockController extends Controller
     public function show($id)
     {
         //
+        $block = Block::all()->where('id', '=', $id)->first();
+        if($block) {
+            $topic = Topic::all()->where('id', '=', $block->topicId)->first();
+            return view('block.show', array('block' => $block, 'topic' => $topic));
+        }
+        return redirect('/');
     }
 
     /**

@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', $topic->topicName)
+@section('title', $block->title)
 
 @section('menu')
     @parent
@@ -12,8 +12,8 @@
             {{ $topic->topicName }}
             </div>
             <div class="card-body">
-            <h5 class="card-title">{{ $topic->topicName }}</h5>
-            <p class="card-text">{{ $topic->created_at }}</p>
+            <h5 class="card-title">{{ $block->title }}</h5>
+            <p class="card-text">{{ $block->created_at }}</p>
             </div>
         </div>
     </div>
