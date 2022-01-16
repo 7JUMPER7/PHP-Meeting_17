@@ -14,18 +14,7 @@
         {!! Form::close() !!}
 
         @foreach ($blocks as $block)
-            {{-- <div class="card m-2">
-                <div class="card-header">
-                {{ $block->topicName }}
-                </div>
-                <div class="card-body">
-                <h5 class="card-title">{{ $block->title }}</h5>
-                <p class="card-text">{{ $block->created_at }}</p>
-                <a href="{{ url('/block', ['id' => $block->id]) }}" class="btn btn-primary">Go to {{ $block->id }}</a>
-                </div>
-            </div> --}}
-
-            <div class="card mb-3" style="max-width: 540px;">
+            <a class="card m-3 hover" style="max-width: 540px; text-decoration: none;" href="{{ url('/block/'.$block->id) }}">
                 <div class="row g-0">
                     @if ($block->imagePath)
                         <div class="col-md-4">
@@ -41,7 +30,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+            </a>
         @endforeach
     </div>
 @endsection

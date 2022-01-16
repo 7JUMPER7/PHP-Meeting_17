@@ -29,16 +29,23 @@
     </div>
     <div class="contentWrap" style="width: 100%;">
         @foreach ($blocks as $block)
-            <div class="card m-4">
-                <div class="card-header">
-                {{ $block->topicName }}
+            <a class="card m-3 hover" style="max-width: 540px; text-decoration: none;" href="{{ url('/block/'.$block->id) }}">
+                <div class="row g-0">
+                    @if ($block->imagePath)
+                        <div class="col-md-4">
+                            <img src="{{ asset($block->imagePath) }}" class="img-fluid rounded-start" alt="...">
+                        </div>
+                    @endif
+                    <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ $block->title }}</h5>
+                      <p class="card-text"><small class="text-muted">{{ $block->topicName }}</small></p>
+                      <p class="card-text">{{ $block->content }}</p>
+                      <p class="card-text"><small class="text-muted">{{ $block->created_at }}</small></p>
+                    </div>
+                  </div>
                 </div>
-                <div class="card-body">
-                <h5 class="card-title">{{ $block->title }}</h5>
-                <p class="card-text">{{ $block->created_at }}</p>
-                <a href="{{ url('/block', ['id' => $block->id]) }}" class="btn btn-primary">Go</a>
-                </div>
-            </div>
+            </a>
         @endforeach
     </div>
 </div>

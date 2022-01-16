@@ -78,6 +78,11 @@ class TopicController extends Controller
     public function edit($id)
     {
         //
+        $topic = Topic::find($id);
+        if($topic) {
+            return view('topic.edit', array('topic' => $topic));
+        }
+        return redirect('/');
     }
 
     /**
@@ -90,6 +95,15 @@ class TopicController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $topic = Topic::find($id);
+        // $topic->id = $id;
+        $topic->topicName = $request->topicname;
+
+        if(!$topic->update()) {
+            $errors = $topic->getErrors();
+            return redirect()->action([TopicController::class, 'edit'], [$id])->with('errors', $errors)->withInput();
+        }
+        return redirect()->action([TopicController::class, 'edit'], [$id])->with('message', 'Successfully created');
     }
 
     /**
@@ -101,5 +115,8 @@ class TopicController extends Controller
     public function destroy($id)
     {
         //
+        $topic = Topic::find($id);
+        $topic->delete();
+        return redirect()->action([HomeController::class, 'index']);
     }
 }

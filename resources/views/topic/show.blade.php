@@ -16,5 +16,18 @@
             <p class="card-text">{{ $topic->created_at }}</p>
             </div>
         </div>
+        <div class="wrap">
+            {!! Form::open(['method' => 'GET', 'route' => ['topic.edit', ['topic' => $topic->id]], 'class' => 'form-horizontal']) !!}
+            <div class="btn-group pull-right">
+                {!! Form::submit('Edit', ['class' => 'btn btn-warning']) !!}
+            </div>
+            {!! Form::close() !!}
+
+            {!! Form::open(['method' => 'DELETE', 'route' => ['topic.destroy', ['topic' => $topic->id]], 'class' => 'form-horizontal']) !!}
+            <div class="btn-group pull-right">
+            {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+            </div>
+            {!! Form::close() !!}
+        </div>
     </div>
 @endsection

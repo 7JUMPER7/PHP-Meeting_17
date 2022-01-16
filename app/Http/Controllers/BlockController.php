@@ -18,7 +18,8 @@ class BlockController extends Controller
     public function index()
     {
         //
-        $blocks = DB::select('select * from Blocks join Topics on Topics.id = Blocks.topicId');
+        $query = ['Blocks.id', 'Blocks.title', 'Blocks.content', 'Blocks.imagePath', 'Blocks.created_at', 'Topics.topicName'];
+        $blocks = DB::table('Blocks')->join('Topics', 'Topics.Id', '=', 'Blocks.topicId')->get($query);
         return view('block.index', array('blocks' => $blocks));
     }
 
@@ -91,6 +92,12 @@ class BlockController extends Controller
     public function edit($id)
     {
         //
+        $block = Block::find($id);
+        if($block) {
+            $topics = Topic::pluck('topicName', 'id');
+            return view('block.edit', array('block' => $block, 'topics' => $topics));
+        }
+        return redirect('/');
     }
 
     /**
@@ -103,6 +110,22 @@ class BlockController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $block = Block::find($id);
+        // $block->id = $id;
+        $block->title = $request->title;
+        $block->topicId = $request->topicId;
+        $block->content = $request->content;
+        if($request->file('photo')) {
+            $filename = $request->file('photo')->getClientOriginalName();
+            $request->file('photo')->move(public_path().'/images', $filename);
+            $block->imagePath = 'images/'.$filename;
+        }
+
+        if(!$block->update()) {
+            $errors = $block->getErrors();
+            return redirect()->action([BlockController::class, 'edit'], [$id])->with('errors', $errors)->withInput();
+        }
+        return redirect()->action([BlockController::class, 'edit'], [$id])->with('message', 'Successfully created');
     }
 
     /**
@@ -114,5 +137,8 @@ class BlockController extends Controller
     public function destroy($id)
     {
         //
+        $block = Block::find($id);
+        $block->delete();
+        return redirect()->action([HomeController::class, 'index']);
     }
 }
